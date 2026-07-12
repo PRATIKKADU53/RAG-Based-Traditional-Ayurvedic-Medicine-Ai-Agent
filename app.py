@@ -136,35 +136,53 @@ def call_orchestrate_agent(user_input, thread_id=None):
 
 # ------------------- STREAMLIT UI -------------------
 st.set_page_config(
-    page_title="AI Assistant — IBM watsonx Orchestrate",
-    page_icon="🤖",
+    page_title="Ayurvedic Medicine AI — Grandma Anong's Remedies",
+    page_icon="🌿",
     layout="centered",
 )
 
-st.title("🤖 AI Assistant")
-st.caption("Powered by IBM watsonx Orchestrate")
+st.title("🌿 Ayurvedic Medicine AI")
+st.caption("Powered by Grandma Anong's 5-generation traditional knowledge + IBM watsonx Orchestrate")
 
 # Sidebar
 with st.sidebar:
-    st.header("About")
-    st.write("This assistant connects to your IBM watsonx Orchestrate agent.")
-    st.write(f"**Region:** {REGION}")
-    st.write(f"**Instance:** `{INSTANCE_ID[:8]}...`")
-    st.write(f"**Agent:** `{AGENT_ID[:8]}...`")
+    st.header("🌿 About This Assistant")
+    st.markdown(
+        "This AI is powered by **Grandma Anong's** proprietary Ayurvedic knowledge — "
+        "authentic herbal remedies and traditional healing practices passed down "
+        "through **five generations** in Kerala, India."
+    )
+    st.markdown(
+        "Ask about remedies for common health concerns using everyday "
+        "kitchen ingredients like ginger, turmeric, tulsi, amla, neem, "
+        "honey, cumin, and lemon."
+    )
+    st.divider()
+    st.markdown("**🔹 What it can do:**")
+    st.markdown("- Suggest Ayurvedic home remedies")
+    st.markdown("- Provide step-by-step preparation")
+    st.markdown("- Adjust ingredient quantities")
+    st.markdown("- Explain traditional uses")
+    st.markdown(f"**Region:** {REGION}")
+    st.markdown(f"**Agent:** `{AGENT_ID[:8]}...`")
 
     st.divider()
 
-    if st.button("New Conversation", use_container_width=True):
+    if st.button("🔄 New Conversation", use_container_width=True):
         st.session_state.messages = []
         st.session_state.thread_id = None
         st.rerun()
 
     st.divider()
-    st.markdown("**Quick Questions**")
-    if st.button("What can you do?", use_container_width=True):
-        st.session_state.quick_prompt = "What can you help me with?"
-    if st.button("Give me advice", use_container_width=True):
-        st.session_state.quick_prompt = "Can you give me some advice?"
+    st.markdown("**🌱 Common Remedies**")
+    if st.button("🤧 Cold & Cough", use_container_width=True):
+        st.session_state.quick_prompt = "I have a cold and cough. Can you suggest an Ayurvedic remedy?"
+    if st.button("🤢 Indigestion", use_container_width=True):
+        st.session_state.quick_prompt = "I have indigestion. What Ayurvedic remedy would help?"
+    if st.button("🤕 Headache", use_container_width=True):
+        st.session_state.quick_prompt = "Do you have an Ayurvedic remedy for headaches?"
+    if st.button("🩹 Skin issue", use_container_width=True):
+        st.session_state.quick_prompt = "Can you suggest an Ayurvedic remedy for a skin irritation?"
 
 # Session state
 if "messages" not in st.session_state:

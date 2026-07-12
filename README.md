@@ -1,6 +1,6 @@
-# 🤖 AI Assistant — IBM watsonx Orchestrate Chat
+# 🌿 Ayurvedic Medicine AI — Grandma Anong's Traditional Remedies
 
-A Streamlit-powered chat interface that connects to **IBM watsonx Orchestrate** — turning your AI agents into a clean, conversational web app.
+A **Streamlit-powered chat interface** that connects to a **RAG-based watsonx Orchestrate agent** — bringing Grandma Anong's five-generation Ayurvedic knowledge to anyone with a link.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.59-red)
@@ -8,12 +8,31 @@ A Streamlit-powered chat interface that connects to **IBM watsonx Orchestrate** 
 
 ---
 
+## 🌟 About the Agent
+
+This AI assistant is built on **proprietary Ayurvedic knowledge** from Grandma Anong's wellness center in Kerala, India — authentic herbal remedies and traditional healing practices passed down through **five generations**.
+
+The knowledge is powered by a **RAG (Retrieval-Augmented Generation)** pipeline using watsonx Orchestrate, which retrieves from a document store containing the family's unique herbal formulations and treatment methods that are not documented in any public books, websites, or other wellness centers.
+
+### What it can help with:
+- **🤧 Cold & Cough** — Ginger, tulsi, honey-based remedies
+- **🤢 Indigestion** — Cumin, ginger, lemon formulations
+- **🤕 Headaches** — Traditional herbal preparations
+- **🩹 Skin Irritations** — Neem, turmeric-based treatments
+- **🔥 Fever** — Herbal decoctions and recipes
+- **💪 Minor Aches** — Ayurvedic oil and paste preparations
+
+All remedies use **everyday kitchen ingredients** with clear step-by-step preparation instructions and dosage guidance.
+
+---
+
 ## ✨ Features
 
-- **💬 Chat interface** — Clean, intuitive Streamlit UI for conversing with your Orchestrate agents
-- **🔐 IAM authentication** — Automatic token management via your IBM Cloud API key
-- **🔄 Conversation tracking** — Maintains context across messages using `conversation_id`
-- **🚀 Quick prompts** — One-click buttons for common questions
+- **💬 Chat interface** — Clean, intuitive Streamlit UI for conversing with the Ayurvedic agent
+- **📚 RAG-powered answers** — Retrieves from Grandma Anong's proprietary document store
+- **🔐 IAM authentication** — Automatic token management via IBM Cloud API key
+- **🔄 Conversation tracking** — Maintains context across messages using thread IDs
+- **🌱 Quick remedy prompts** — One-click buttons for common health concerns
 - **🧹 New Conversation** — Reset the chat with one click
 - **☁️ Docker-ready** — Deploy to IBM Cloud Code Engine or any container platform
 
@@ -32,10 +51,11 @@ A Streamlit-powered chat interface that connects to **IBM watsonx Orchestrate** 
 
 ## 🚀 Quick Start (Local)
 
-### 1. Clone & Navigate
+### 1. Clone
 
 ```bash
-cd my-orchestrate-app
+git clone https://github.com/PRATIKKADU53/RAG-Based-Traditional-Ayurvedic-Medicine-Ai-Agent.git
+cd RAG-Based-Traditional-Ayurvedic-Medicine-Ai-Agent
 ```
 
 ### 2. Set Up Environment
@@ -45,7 +65,6 @@ cd my-orchestrate-app
 cp .env.example .env
 
 # Edit .env with your credentials
-# Get these from your watsonx Orchestrate service instance
 ```
 
 Your `.env` file should look like:
@@ -54,7 +73,7 @@ Your `.env` file should look like:
 ORCHESTRATE_API_KEY="your-ibm-cloud-api-key"
 ORCHESTRATE_INSTANCE_ID="your-orchestrate-instance-id"
 ORCHESTRATE_REGION="us-south"
-ORCHESTRATE_AGENT_ID="optional-agent-id"
+ORCHESTRATE_AGENT_ID="your-agent-id"
 ```
 
 ### 3. Install Dependencies
@@ -69,83 +88,49 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Open **http://localhost:8501** in your browser.
+Open **http://localhost:8501** in your browser and start asking about Ayurvedic remedies!
 
 ---
 
-## ☁️ Deploy to IBM Cloud Code Engine
+## ☁️ Deploy to IBM Cloud Code Engine (Web Console)
 
-### Build and Push to IBM Cloud Container Registry
+### Step 1: Create a Code Engine Project
+1. Go to [IBM Cloud Code Engine](https://cloud.ibm.com/codeengine/overview)
+2. Click **"Start creating"** → **"Create project"**
+3. Name it (e.g., `ayurvedic-chat-app`) and create
 
-```bash
-# Log in to IBM Cloud
-ibmcloud login
+### Step 2: Create an Application
+1. Inside your project, click **"Application"** → **"Create application"**
 
-# Target your resource group and region
-ibmcloud target -g <resource-group> -r <region>
+| Setting | Value |
+|---------|-------|
+| **Container source** | Build from repository |
+| **Repository URL** | `https://github.com/PRATIKKADU53/RAG-Based-Traditional-Ayurvedic-Medicine-Ai-Agent` |
+| **Branch** | `main` |
+| **Dockerfile** | Checked (use `Dockerfile`) |
+| **Port** | `8501` |
+| **CPU / Memory** | `0.5 vCPU` / `1 GB` |
+| **Min scale** | `0` (scales to zero — free when idle) |
+| **Max scale** | `1` |
 
-# Log in to Container Registry
-ibmcloud cr login
+### Step 3: Add Environment Variables
+Add these under **Environment variables** (mark as **secret/protected**):
 
-# Build the image
-docker build -t us.icr.io/<namespace>/orchestrate-chat:latest .
+| Name | Value |
+|------|-------|
+| `ORCHESTRATE_API_KEY` | Your IBM Cloud API key |
+| `ORCHESTRATE_INSTANCE_ID` | Your watsonx Orchestrate instance ID |
+| `ORCHESTRATE_REGION` | `us-south` |
+| `ORCHESTRATE_AGENT_ID` | Your agent ID |
 
-# Push the image
-docker push us.icr.io/<namespace>/orchestrate-chat:latest
+### Step 4: Deploy
+Click **"Create"** and wait ~3-5 minutes. You'll get a public URL like:
+
+```
+https://ayurvedic-chat-app.abc123.codeengine.appdomain.cloud
 ```
 
-### Deploy in Code Engine
-
-```bash
-# Create a Code Engine project (if you don't have one)
-ibmcloud ce project create --name orchestrate-chat
-
-# Create the app
-ibmcloud ce app create \
-  --name orchestrate-chat \
-  --image us.icr.io/<namespace>/orchestrate-chat:latest \
-  --cpu 0.5 \
-  --memory 1G \
-  --min-scale 0 \
-  --max-scale 1 \
-  --env ORCHESTRATE_API_KEY="your-api-key" \
-  --env ORCHESTRATE_INSTANCE_ID="your-instance-id" \
-  --env ORCHESTRATE_REGION="us-south" \
-  --env ORCHESTRATE_AGENT_ID="" \
-  --wait
-```
-
-### Deploy via Console (Alternative)
-
-1. Go to **IBM Cloud Code Engine** → **Projects** → **Start creating**
-2. Click **Application**
-3. Configure:
-   - **Name**: `orchestrate-chat`
-   - **Container image**: Use the image from Container Registry
-   - **Port**: `8501`
-   - **CPU/Memory**: 0.5 vCPU / 1 GB
-   - **Min scale**: 0 (scales to zero when idle)
-4. Under **Environment variables**, add your credentials
-5. Click **Create**
-
-Your app will be available at the provided URL.
-
----
-
-## 🐳 Docker (Local)
-
-```bash
-# Build
-docker build -t orchestrate-chat .
-
-# Run
-docker run -p 8501:8501 \
-  -e ORCHESTRATE_API_KEY="your-api-key" \
-  -e ORCHESTRATE_INSTANCE_ID="your-instance-id" \
-  -e ORCHESTRATE_REGION="us-south" \
-  -e ORCHESTRATE_AGENT_ID="" \
-  orchestrate-chat
-```
+Share this link with anyone — friends, faculty, or clients!
 
 ---
 
@@ -153,29 +138,22 @@ docker run -p 8501:8501 \
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `ORCHESTRATE_API_KEY` | ✅ Yes | — | Your IBM Cloud API key |
-| `ORCHESTRATE_INSTANCE_ID` | ✅ Yes | — | Your watsonx Orchestrate instance GUID |
-| `ORCHESTRATE_REGION` | ❌ No | `us-south` | API region (`us-south`, `eu-gb`, `eu-de`, `au-syd`, `jp-tok`) |
-| `ORCHESTRATE_AGENT_ID` | ❌ No | — | Specific agent to use (blank = default) |
-
-### Where to find your credentials
-
-1. **Instance ID**: IBM Cloud → Resource List → watsonx Orchestrate → Copy the GUID from the service credentials or the browser URL
-2. **API Key**: IBM Cloud → Manage → Access (IAM) → API Keys → Create
-3. **Agent ID** (optional): In your Orchestrate instance, open the agent and copy its ID from the URL or details panel
+| `ORCHESTRATE_API_KEY` | ✅ Yes | — | IBM Cloud API key |
+| `ORCHESTRATE_INSTANCE_ID` | ✅ Yes | — | watsonx Orchestrate instance GUID |
+| `ORCHESTRATE_REGION` | ❌ No | `us-south` | API region |
+| `ORCHESTRATE_AGENT_ID` | ✅ Yes | — | Your Ayurvedic agent ID |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-my-orchestrate-app/
-├── app.py                 # Main Streamlit application
+├── app.py                 # Streamlit chat application
 ├── requirements.txt       # Python dependencies
-├── .env                   # Your credentials (gitignored)
-├── .env.example           # Template for environment variables
-├── Dockerfile             # Container definition
-├── .gitignore             # Files to exclude from git
+├── .env                   # Credentials (gitignored — never commit)
+├── .env.example           # Template for env vars
+├── Dockerfile             # Container definition for Code Engine
+├── .gitignore
 └── README.md              # This file
 ```
 
@@ -184,18 +162,20 @@ my-orchestrate-app/
 ## 🤝 How It Works
 
 1. The app authenticates with **IBM Cloud IAM** using your API key
-2. It sends your messages to the **watsonx Orchestrate Chat API**
-3. The Orchestrate agent processes the request (using any skills, integrations, or LLMs you've configured)
-4. The response is displayed in a conversational Streamlit UI
+2. Your message is sent to the **watsonx Orchestrate Runs API**
+3. The **RAG agent** retrieves relevant knowledge from Grandma Anong's proprietary document store
+4. An LLM synthesizes the response with the retrieved context
+5. The remedy is displayed in a clean chat interface with conversation history
 
 ---
 
 ## 📝 Notes
 
-- The app does **not** store your credentials or conversation data — everything stays in memory
-- Conversation context (`conversation_id`) is maintained within your browser session
-- Reset the conversation anytime with the **New Conversation** button in the sidebar
-- For production, use **IBM Cloud Secrets Manager** or Code Engine's built-in secrets instead of `.env`
+- Credentials stay in your `.env` file or Code Engine secrets — **never committed to Git**
+- Conversation context is maintained via thread IDs in your browser session
+- Click **New Conversation** anytime to start fresh
+- The knowledge base contains **proprietary family remedies** not available in public sources
+- For best results, describe your symptoms clearly and mention any relevant ingredients you have on hand
 
 ---
 
