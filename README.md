@@ -1,4 +1,4 @@
-# 🌿 Ayurvedic Medicine AI — Grandma Anong's Traditional Remedies
+# 🌿 Ayurvedic Medicine AI 
 
 A **Streamlit-powered chat interface** that connects to a **RAG-based watsonx Orchestrate agent** — bringing Grandma Anong's five-generation Ayurvedic knowledge to anyone with a link.
 
